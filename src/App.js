@@ -13,7 +13,7 @@ function App() {
       return;
     }
 
-    const result = convert(inputValue.replaceAll(' ', ''));
+    const result = convert(inputValue); // .replaceAll(' ', ''));
     setResult(result);
   }
 
@@ -22,8 +22,12 @@ function App() {
     setInputValue('');
   }
 
-  const handleChange = (e) => {
-    setInputValue(e);
+  const handleChange = (value) => {
+    if (value < 0) {
+      return;
+    }
+
+    setInputValue(value);
   }
 
   return (
@@ -36,7 +40,7 @@ function App() {
           <button onClick={handleReset}>Reset</button>
         </div>
         <p style={{ marginBottom: '0px' }}>Results :</p>
-        <p>" {result} "</p>
+        <p data-testid="result">" {result} "</p>
       </header>
     </div>
   );

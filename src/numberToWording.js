@@ -45,7 +45,7 @@ const numberToWording = (number) => {
     case 30:
       return 'Thirty';
     case 40:
-      return 'Fourty';
+      return 'Forty';
     case 50:
       return 'Fivety';
     case 60:

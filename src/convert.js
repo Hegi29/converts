@@ -11,35 +11,40 @@ const arrangeWord = (arrObj, isCents) => {
   }
 
   if (result.trim()) {
-    result += ` ${!isCents ? CURRENCY : 'cents'}`;
+    result += `${!isCents ? CURRENCY : 'cents'}`;
   }
 
   return result;
+}
+
+const setArrObj = (arrFormattedValue) => {
+  let arrObj = [];
+
+  for (const item of arrFormattedValue) {
+    const value = parseInt(item, 10);
+    const rts = Math.floor(value / 100) * 100;
+    const plh = Math.floor(value / 10) * 10;
+    const stn = item - plh;
+
+    const obj = {
+      ratusan: rts,
+      puluhan: plh - rts,
+      satuan: stn,
+      terbilang: '',
+      type: ''
+    }
+
+    arrObj.push(obj);
+  }
+
+  return arrObj;
 }
 
 const generateWording = (inputValue, isCents) => {
   try {
     let formattedValue = Intl.NumberFormat('id-ID').format(inputValue);
     const arrFormattedValue = formattedValue.split('.');
-
-    let arrObj = [];
-
-    for (const item of arrFormattedValue) {
-      const value = parseInt(item, 10);
-      const rts = Math.floor(value / 100) * 100;
-      const plh = Math.floor(value / 10) * 10;
-      const stn = item - plh;
-
-      const obj = {
-        ratusan: rts,
-        puluhan: plh - rts,
-        satuan: stn,
-        terbilang: '',
-        type: ''
-      }
-
-      arrObj.push(obj);
-    }
+    const arrObj = setArrObj(arrFormattedValue);
 
     let loopType = 1;
 
@@ -52,7 +57,7 @@ const generateWording = (inputValue, isCents) => {
 
       if (item.puluhan > 0) {
         if (item.ratusan > 0) {
-          item.terbilang += ' and ';
+          item.terbilang += ' and';
         }
 
         if (item.puluhan > 10) {
@@ -66,14 +71,12 @@ const generateWording = (inputValue, isCents) => {
       }
 
       if (item.satuan > 0) {
-        if (item.puluhan > 10) {
-          item.terbilang += item.ratusan > 0 && item.puluhan === 0 ? ' ' : '';
+        const s1 = numberToWording(item.satuan);
 
-          const s1 = numberToWording(item.satuan);
+        if (item.puluhan > 10) {
           item.terbilang += s1;
         } else if (item.puluhan === 0) {
-          const s2 = numberToWording(item.satuan);
-          item.terbilang += ` ${s2}`;
+          item.terbilang += ` ${s1}`;
         }
 
       }
@@ -102,14 +105,14 @@ const convert = (inputValue) => {
   result += generateWording(nonCents, false);
 
   if (cents && result.trim()) {
-    result += ' and ';
+    result += ' and';
   }
 
   if (cents) {
     result += generateWording(cents, true);
   }
 
-  return result.toUpperCase();
+  return result.toUpperCase().replace(/\s+/g, ' ');;
 }
 
 export default convert;
