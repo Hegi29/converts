@@ -33,6 +33,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <h1>Converter Hegi (SE-PG)</h1>
         <img src={logo} className="App-logo" alt="logo" />
         <div style={{ display: 'flex' }}>
           <input type='number' style={{ marginRight: '10px', width: '400px' }} onChange={e => handleChange(e.target.value)} value={inputValue} placeholder='please input number' />
